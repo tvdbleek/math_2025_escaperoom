@@ -1,0 +1,74 @@
+name: Deploy to GitHub Pages
+
+on:
+  push:
+    branches:
+      - main
+      - develop
+
+permissions:
+  contents: write
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    concurrency: ci-${{ github.ref }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Install and Build (Main)
+        if: github.ref == 'refs/heads/main'
+        run: |
+          npm ci
+          npm run build -- --base=/math_2025_escaperoom/
+
+      - name: Install and Build (Develop)
+        if: github.ref == 'refs/heads/develop'
+        run: |
+          npm ci
+          npm run build -- --base=/math_2025_escaperoom/dev/
+
+      - name: Deploy Main to Root
+        if: github.ref == 'refs/heads/main'
+        uses: JamesIves/github-pages-deploy-action@v4
+        with:
+          folder: dist
+          branch: gh-pages
+          target-folder: .
+          clean: true 
+          # clean: true removes files from the target branch that are not in the build folder, 
+          # BUT we need to be careful not to wipe the /dev folder when deploying main, or root when deploying dev.
+          # The standard action behavior with 'clean: true' wipes the branch. 
+          # To support dual deployment in the SAME branch (gh-pages), we need a more nuanced approach or use distinct branches/artifacts.
+          # BETTER APPROACH for same-branch hosting:
+          # Actually, JamesIves/github-pages-deploy-action has 'clean-exclude'.
+          
+      # REVISED STRATEGY: 
+      # Deploying to the SAME branch (gh-pages) from two different source branches (main/develop) is tricky because they will overwrite each other's history 
+      # or wipe each other's files if not careful.
+      # A common pattern is to deploy to subfolders.
+      # Main -> root
+      # Develop -> /dev
+      
+      # Retrying the Deploy step with better configuration for coexistence.
+      
+      - name: Deploy to GitHub Pages (Main)
+        if: github.ref == 'refs/heads/main'
+        uses: JamesIves/github-pages-deploy-action@v4
+        with:
+          folder: dist
+          branch: gh-pages
+          clean: true
+          clean-exclude: dev 
+          # Keep the 'dev' folder when deploying main
+
+      - name: Deploy to GitHub Pages (Develop)
+        if: github.ref == 'refs/heads/develop'
+        uses: JamesIves/github-pages-deploy-action@v4
+        with:
+          folder: dist
+          branch: gh-pages
+          target-folder: dev
+          clean: false 
+          # Don't wipe the root when deploying dev, just update the target folder
