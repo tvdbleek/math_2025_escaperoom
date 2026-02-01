@@ -1,0 +1,8 @@
+/* Reset App.css to avoid conflicting with our manual layout */
+#root {
+  width: 100% !important;
+  max-width: none !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  text-align: left !important;
+}
