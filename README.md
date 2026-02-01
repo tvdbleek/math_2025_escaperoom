@@ -21,12 +21,12 @@ We use a dual-branch deployment strategy to host both the production and develop
 
 - **Main Branch (`main`)**: 
   - Deployed to the **root** of the GitHub Pages site.
-  - URL: `https://<username>.github.io/math_2025_escaperoom/`
+  - URL: `https://tvdbleek.github.io/math_2025_escaperoom/`
   - This is the stable, production-ready version.
 
 - **Develop Branch (`develop`)**:
   - Deployed to the **/dev** subfolder.
-  - URL: `https://<username>.github.io/math_2025_escaperoom/dev/`
+  - URL: `https://tvdbleek.github.io/math_2025_escaperoom/dev/`
   - This is for testing new features before merging to main.
 
 ### Automated Process
