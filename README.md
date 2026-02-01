@@ -1,5 +1,14 @@
 # Math 2025 Escape Room
 
+## About The Project
+
+This project is a school assignment combining history and mathematics into an interactive web-based escape room experience. 
+
+**Theme:** World War II Story
+**Core Mechanics:** Solving math puzzles to progress through the narrative.
+
+Players follow a storyline set during the Second World War, where they must solve various mathematical challenges to unlock new stages and uncover the plot.
+
 This is a React Application built with Vite.
 
 ## Build and Deployment
