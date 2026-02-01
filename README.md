@@ -1,20 +1,53 @@
-# React + Vite
+# Math 2025 Escape Room
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+This is a React Application built with Vite.
 
-Currently, two official plugins are available:
+## Build and Deployment
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+This project uses **GitHub Actions** for Continuous Integration and Continuous Deployment (CI/CD). 
 
-## React Compiler
+### Workflow
 
-The React Compiler is currently not compatible with SWC. See [this issue](https://github.com/vitejs/vite-plugin-react/issues/428) for tracking the progress.
-- [x] Analyze `tunnel-launcher.js` for potential race conditions or output issues <!-- id: 6 -->
-- [x] Ensure `localtunnel` handles subdomain conflicts gracefully <!-- id: 7 -->
-- [x] Update terminal output to be more immediate and robust <!-- id: 8 -->
-- [x] Verify if `localtunnel` is installed or needs a specific version <!-- id: 9 -->
+We use a dual-branch deployment strategy to host both the production and development versions of the application on GitHub Pages.
 
-## Expanding the ESLint configuration
+- **Main Branch (`main`)**: 
+  - Deployed to the **root** of the GitHub Pages site.
+  - URL: `https://<username>.github.io/math_2025_escaperoom/`
+  - This is the stable, production-ready version.
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+- **Develop Branch (`develop`)**:
+  - Deployed to the **/dev** subfolder.
+  - URL: `https://<username>.github.io/math_2025_escaperoom/dev/`
+  - This is for testing new features before merging to main.
+
+### Automated Process
+
+The workflow is defined in `.github/workflows/deploy.yml`. 
+
+1.  **Trigger**: Pushes to `main` or `develop` trigger the workflow.
+2.  **Build**: The project is built using `npm run build`.
+    - `main` is built with base path `/math_2025_escaperoom/`.
+    - `develop` is built with base path `/math_2025_escaperoom/dev/`.
+3.  **Deploy**: The build artifacts are deployed to the `gh-pages` branch.
+    - `main` updates the root, preserving the `dev` folder.
+    - `develop` updates the `dev` folder, preserving the root.
+
+### Manual Build
+
+To build locally:
+
+```bash
+# For Main/Root
+vite build --base=/math_2025_escaperoom/
+
+# For Develop/Dev
+vite build --base=/math_2025_escaperoom/dev/
+```
+
+## Development
+
+To run the development server:
+
+```bash
+npm run dev
+```
